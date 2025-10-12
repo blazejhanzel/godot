@@ -4792,6 +4792,18 @@ void EditorInspector::edit(Object *p_object) {
 	emit_signal(SNAME("edited_object_changed"));
 }
 
+EditorProperty *EditorInspector::get_property(const String &p_property) {
+	if (!p_property.is_empty() && editor_property_map.has(p_property)) {
+		for (EditorProperty *E : editor_property_map[p_property]) {
+			if (E && E->is_inside_tree()) {
+				return E;
+			}
+		}
+	}
+
+	return nullptr;
+}
+
 void EditorInspector::set_keying(bool p_active) {
 	if (keying == p_active) {
 		return;
