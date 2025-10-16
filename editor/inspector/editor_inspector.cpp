@@ -4794,16 +4794,16 @@ void EditorInspector::edit(Object *p_object) {
 
 EditorProperty *EditorInspector::get_property(const String &p_property) {
 	if (!p_property.is_empty()) {
-		if (editor_property_map.has(p_property)) {
-			List<EditorProperty *> props = editor_property_map[p_property];
-			for (List<EditorProperty *>::Element *E = props.front(); E; E = E->next()) {
-				EditorProperty *prop = E->get();
-				if (prop && prop->is_inside_tree()) {
-					return prop;
+		auto it = editor_property_map.find(p_property);
+		if (it != editor_property_map.end()) {
+			for (EditorProperty *E : it->value) {
+				if (E && E->is_inside_tree()) {
+					return E;
 				}
 			}
 		}
 	}
+
 	return nullptr;
 }
 
